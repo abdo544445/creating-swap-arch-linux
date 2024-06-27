@@ -34,3 +34,38 @@ Here's a breakdown of these steps:
 6. Finally, we verify that the swap is active.
 
 After running these commands, you should have an 8GB swap file set up and active on your Arch Linux system.
+
+
+# removing the swap 
+To delete the swap file we just created on Arch Linux, you'll need to follow these steps:
+
+
+
+```bash
+# 1. Turn off the swap
+sudo swapoff /swapfile
+
+# 2. Remove the swap file entry from /etc/fstab
+sudo sed -i '/swapfile/d' /etc/fstab
+
+# 3. Delete the swap file
+sudo rm /swapfile
+
+# 4. Verify the swap has been removed
+free -h
+
+```
+
+Here's an explanation of these steps:
+
+1. First, we turn off the swap using the `swapoff` command. This ensures the system stops using the swap file.
+
+2. Next, we remove the swap file entry from /etc/fstab. This prevents the system from trying to use the swap file on next boot. The `sed` command searches for any line containing 'swapfile' and deletes it.
+
+3. We then delete the actual swap file using the `rm` command.
+
+4. Finally, we verify that the swap has been removed by checking the system's memory information.
+
+After running these commands, the swap file will be completely removed from your system.
+
+Remember to run these commands with caution, especially if you've made any custom modifications to your swap setup. Always double-check before deleting system files.
