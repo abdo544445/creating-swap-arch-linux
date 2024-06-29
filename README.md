@@ -1,27 +1,43 @@
 # creating-swap-arch-linux
 Certainly, I can guide you through setting up an 8 GB swap file on Arch Linux. Here are the steps:
 
-
+1. First, let's remove the existing swapfile:
 
 ```bash
-# 1. Create an 8GB swap file
-sudo fallocate -l 8G /swapfile
+sudo rm /swapfile
+```
 
-# 2. Set correct permissions (readable only by root)
+2. Now, let's create the swapfile with COW disabled, but without trying to set the compression property:
+
+```bash
+sudo truncate -s 0 /swapfile
+sudo chattr +C /swapfile
+sudo fallocate -l 2G /swapfile
 sudo chmod 600 /swapfile
-
-# 3. Format the file as swap
 sudo mkswap /swapfile
+```
 
-# 4. Enable the swap file
+3. Try to activate the swap:
+
+```bash
 sudo swapon /swapfile
+```
 
-# 5. Make the swap file permanent by adding it to /etc/fstab
+4. If successful, make it permanent by adding to /etc/fstab:
+
+```bash
 echo '/swapfile none swap defaults 0 0' | sudo tee -a /etc/fstab
+```
 
-# 6. Verify the swap is active
-free -h
+5. To verify that COW is disabled for the swapfile, you can use:
 
+```bash
+lsattr /swapfile
+```
+
+You should see the 'C' attribute listed, indicating that COW is disabled.
+
+If you still encounter issues, we might need to consider creating a separate swap partition instead. Would you like to try these steps first, or should we explore the partition option?
 ```
 
 Here's a breakdown of these steps:
